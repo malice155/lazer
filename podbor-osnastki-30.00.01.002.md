@@ -94,3 +94,18 @@
 **Пуансон:** R47 + R10 (радиусные)  
 **Матрица:** V100 + V24  
 **Порядок:** сначала 45°/R10, затем 90°/R47
+
+---
+
+## Изготовление пуансона R47 лазером (лист 5 мм)
+
+Готового R47 нет — режем пластины **5 мм** и свариваем пакет:
+
+| | |
+|---|---|
+| Кол-во пластин | **32 шт** |
+| Длина пакета | **160 мм** |
+| DXF нестинг | [`dxf/punch-R47-nest-32pcs-5mm.dxf`](./dxf/punch-R47-nest-32pcs-5mm.dxf) |
+| DXF 1 шт | [`dxf/punch-R47-plate-5mm.dxf`](./dxf/punch-R47-plate-5mm.dxf) |
+| Калибры | [`dxf/punch-R47-gauge-5mm.dxf`](./dxf/punch-R47-gauge-5mm.dxf) |
+| Инструкция | [`dxf/punch-R47-cutting-card.md`](./dxf/punch-R47-cutting-card.md) |
