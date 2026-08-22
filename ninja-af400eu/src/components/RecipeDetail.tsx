@@ -207,7 +207,14 @@ export function RecipeDetail({
       </div>
 
       <div className="source-note">
-        Источник: {recipe.source.label}
+        Источник:{' '}
+        {recipe.source.url ? (
+          <a href={recipe.source.url} target="_blank" rel="noreferrer">
+            {recipe.source.label}
+          </a>
+        ) : (
+          recipe.source.label
+        )}
         {recipe.titleOriginal ? ` · оригинальное название: ${recipe.titleOriginal}` : ''}
       </div>
     </div>

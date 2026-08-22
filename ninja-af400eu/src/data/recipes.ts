@@ -1,8 +1,9 @@
 import type { Recipe, RecipeCategory } from '../types'
 import { officialRecipes } from './recipes-official'
+import { siteRecipes } from './recipes-site'
 import { basicRecipes } from './recipes-basics'
 
-export const recipes: Recipe[] = [...officialRecipes, ...basicRecipes]
+export const recipes: Recipe[] = [...officialRecipes, ...siteRecipes, ...basicRecipes]
 
 export const categories: Array<{ id: RecipeCategory; title: string; icon: string }> = [
   { id: 'chicken', title: 'Курица', icon: '🍗' },
