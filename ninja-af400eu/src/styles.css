@@ -1,0 +1,716 @@
+:root {
+  --bg: #fdf7f0;
+  --card: #ffffff;
+  --ink: #2f2620;
+  --ink-soft: #6d6058;
+  --accent: #b3541e;
+  --accent-soft: #f6e3d5;
+  --accent-2: #7c4a2d;
+  --line: #ece0d5;
+  --heart: #d6336c;
+  --zone1: #2f7d69;
+  --zone2: #9d5c9c;
+  --radius: 18px;
+  --shadow: 0 2px 10px rgba(96, 62, 38, 0.07);
+  --nav-height: 62px;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  overscroll-behavior-y: none;
+}
+
+body {
+  padding-top: env(safe-area-inset-top);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+.app {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 16px calc(var(--nav-height) + env(safe-area-inset-bottom) + 24px);
+}
+
+/* ---------- Общие элементы ---------- */
+
+.screen-title {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 18px 0 4px;
+}
+
+.screen-sub {
+  color: var(--ink-soft);
+  font-size: 14px;
+  margin: 0 0 16px;
+}
+
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.pill-row {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 0 10px;
+  scrollbar-width: none;
+  margin: 0 -16px;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.pill-row::-webkit-scrollbar {
+  display: none;
+}
+
+.pill {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 8px 14px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  font-size: 14px;
+  white-space: nowrap;
+  color: var(--ink-soft);
+}
+
+.pill.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+.search {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  outline: none;
+}
+
+.search:focus {
+  border-color: var(--accent);
+}
+
+.empty {
+  text-align: center;
+  color: var(--ink-soft);
+  padding: 40px 20px;
+}
+
+.empty-emoji {
+  font-size: 40px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* ---------- Приветствие ---------- */
+
+.hero {
+  background: linear-gradient(135deg, #b3541e, #d97941);
+  color: #fff;
+  border-radius: 22px;
+  padding: 22px 20px;
+  margin: 16px 0 14px;
+  box-shadow: 0 6px 18px rgba(179, 84, 30, 0.25);
+}
+
+.hero-eyebrow {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  opacity: 0.85;
+}
+
+.hero-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 8px 0 6px;
+  line-height: 1.25;
+}
+
+.hero-note {
+  font-size: 14px;
+  opacity: 0.92;
+  margin: 0;
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.stat {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 12px 8px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+.stat-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.section-heading {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 22px 0 10px;
+}
+
+.tile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.tile {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px;
+  text-align: left;
+  display: block;
+}
+
+.tile-emoji {
+  font-size: 24px;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.tile-title {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.tile-sub {
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+/* ---------- Карточка рецепта ---------- */
+
+.recipe-card {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  width: 100%;
+  text-align: left;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px;
+  margin-bottom: 10px;
+}
+
+.recipe-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.recipe-card-title {
+  font-weight: 650;
+  font-size: 16px;
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+
+.recipe-card-sub {
+  font-size: 13px;
+  color: var(--ink-soft);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.chip {
+  font-size: 11px;
+  border-radius: 999px;
+  padding: 3px 9px;
+  background: var(--accent-soft);
+  color: var(--accent-2);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.chip.mode {
+  background: #e6f0ec;
+  color: var(--zone1);
+}
+
+.chip.veg {
+  background: #e8f3df;
+  color: #4a7c2f;
+}
+
+.chip.plain {
+  background: #f2ece7;
+  color: var(--ink-soft);
+}
+
+.heart-btn {
+  font-size: 22px;
+  line-height: 1;
+  padding: 4px;
+  flex: 0 0 auto;
+}
+
+/* ---------- Детальная страница ---------- */
+
+.detail-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--bg);
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.back-btn {
+  font-size: 15px;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.detail-title {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 6px 0 8px;
+}
+
+.detail-summary {
+  color: var(--ink-soft);
+  margin: 0 0 14px;
+}
+
+.zone-card {
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  border: 1px solid var(--line);
+  background: var(--card);
+}
+
+.zone-badge {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  border-radius: 999px;
+  padding: 2px 10px;
+  display: inline-block;
+}
+
+.zone-badge.z1 {
+  background: var(--zone1);
+}
+
+.zone-badge.z2 {
+  background: var(--zone2);
+}
+
+.zone-title {
+  font-weight: 600;
+  margin: 8px 0 6px;
+}
+
+.zone-settings {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+.zone-settings b {
+  color: var(--ink);
+}
+
+.timer-btn {
+  margin-top: 10px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-weight: 600;
+  font-size: 14px;
+  width: 100%;
+}
+
+.timer-btn.secondary {
+  background: var(--accent-soft);
+  color: var(--accent-2);
+}
+
+.timer-live {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: #f6f1ec;
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.timer-value {
+  font-size: 22px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+
+.ingredient-group-title {
+  font-weight: 650;
+  margin: 12px 0 6px;
+  font-size: 15px;
+}
+
+ul.clean,
+ol.clean {
+  margin: 0;
+  padding-left: 20px;
+}
+
+ul.clean li,
+ol.clean li {
+  margin-bottom: 7px;
+}
+
+.tip {
+  background: #fff8ec;
+  border-left: 3px solid #e0a545;
+  border-radius: 0 12px 12px 0;
+  padding: 10px 12px;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.source-note {
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+/* ---------- Заметки ---------- */
+
+.stars {
+  display: flex;
+  gap: 4px;
+  margin: 6px 0 12px;
+}
+
+.star {
+  font-size: 26px;
+  line-height: 1;
+  filter: grayscale(1);
+  opacity: 0.35;
+}
+
+.star.on {
+  filter: none;
+  opacity: 1;
+}
+
+.note-area {
+  width: 100%;
+  min-height: 96px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  padding: 12px;
+  resize: vertical;
+  outline: none;
+  background: #fffdfb;
+}
+
+.note-area:focus {
+  border-color: var(--accent);
+}
+
+.row-btns {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.btn {
+  flex: 1;
+  border-radius: 12px;
+  padding: 11px 12px;
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+  background: var(--accent-soft);
+  color: var(--accent-2);
+}
+
+.btn.primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ---------- Таблицы ---------- */
+
+.table-wrap {
+  overflow-x: auto;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  margin-bottom: 14px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13px;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 9px 11px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  white-space: pre-line;
+}
+
+th {
+  background: #faf4ee;
+  font-weight: 650;
+  font-size: 12px;
+  color: var(--ink-soft);
+  position: sticky;
+  top: 0;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.group-title {
+  font-weight: 700;
+  font-size: 15px;
+  margin: 18px 0 8px;
+  color: var(--accent-2);
+}
+
+.note-box {
+  background: #f3f7f5;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-bottom: 10px;
+}
+
+/* ---------- Инструкция ---------- */
+
+.guide-item {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.guide-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 16px;
+  text-align: left;
+  font-weight: 600;
+}
+
+.guide-head .arrow {
+  margin-left: auto;
+  color: var(--ink-soft);
+  transition: transform 0.2s;
+}
+
+.guide-head .arrow.open {
+  transform: rotate(90deg);
+}
+
+.guide-body {
+  padding: 0 16px 16px;
+  font-size: 15px;
+}
+
+.guide-body p {
+  margin: 0 0 10px;
+}
+
+/* ---------- Нижняя навигация ---------- */
+
+.nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  display: flex;
+  background: rgba(255, 253, 251, 0.94);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--line);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.nav-btn {
+  flex: 1;
+  padding: 8px 2px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 10px;
+  color: var(--ink-soft);
+}
+
+.nav-btn .ico {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.nav-btn.active {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ---------- Плашка таймеров ---------- */
+
+.timer-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--nav-height) + env(safe-area-inset-bottom));
+  z-index: 19;
+  display: flex;
+  gap: 8px;
+  padding: 8px 16px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.timer-chip {
+  flex: 1;
+  background: var(--ink);
+  color: #fff;
+  border-radius: 12px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 13px;
+  box-shadow: 0 4px 14px rgba(47, 38, 32, 0.25);
+}
+
+.timer-chip.done {
+  background: var(--zone1);
+}
+
+.timer-chip b {
+  font-variant-numeric: tabular-nums;
+  font-size: 15px;
+}
+
+/* ---------- Тост ---------- */
+
+.toast {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: calc(var(--nav-height) + env(safe-area-inset-bottom) + 16px);
+  z-index: 30;
+  background: var(--ink);
+  color: #fff;
+  border-radius: 14px;
+  padding: 13px 16px;
+  font-size: 14px;
+  text-align: center;
+  max-width: 608px;
+  margin: 0 auto;
+  box-shadow: 0 8px 24px rgba(47, 38, 32, 0.3);
+  animation: toast-in 0.25s ease;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.love-note {
+  text-align: center;
+  color: var(--accent-2);
+  font-size: 14px;
+  padding: 22px 10px 6px;
+  font-style: italic;
+}
