@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
+    "build:single": "tsc --noEmit && SINGLE_FILE=1 vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit"
   },
@@ -20,6 +21,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "typescript": "^5.7.2",
     "vite": "^6.0.5",
-    "vite-plugin-pwa": "^0.21.1"
+    "vite-plugin-pwa": "^0.21.1",
+    "vite-plugin-singlefile": "^2.3.3"
   }
 }
