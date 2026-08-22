@@ -59,12 +59,19 @@ export default defineConfig({
       ? [
           viteSingleFile(),
           {
-            name: 'strip-module-type',
+            name: 'single-file-html',
             enforce: 'post' as const,
             transformIndexHtml(html: string) {
+              const scripts: string[] = []
               return html
-                .replace(/<script type="module"/g, '<script')
                 .replace(/\s*<link rel="[^"]*icon[^"]*"[^>]*>/g, '')
+                // Без type="module" скрипт выполняется сразу, поэтому переносим его
+                // в конец body — иначе он стартует раньше, чем появится #root.
+                .replace(/<script type="module"([^>]*)><\/script>/g, (_m, attrs: string) => {
+                  scripts.push(`<script${attrs}></script>`)
+                  return ''
+                })
+                .replace('</body>', `${scripts.join('\n    ')}\n  </body>`)
             },
           },
         ]
