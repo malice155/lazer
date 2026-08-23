@@ -16,16 +16,9 @@
 python3 tools/generate_punch_r47_amada_dxf.py
 ```
 
-## Раскладки на лист 3015 / 4020
-- [`dxf/punch-R47-sheet-nests.md`](./dxf/punch-R47-sheet-nests.md) — компакт 32 / полоса 3015 / полный 3015 / полный 4020
-- DXF полосы: `dxf/punch-R47-amada-nest-3015-strip.dxf`. Полные листы — скриптом ниже.
-
-```bash
-python3 tools/generate_punch_r47_sheet_nests.py
-```
-
 ## Закупка лазера мощнее L3030
-- [Решение директора, пакеты, цех, ТСО](./docs/zakupka-lazera-2026.md)
+Job-shop, **без азота** (O₂ + воздух), кран 3 т уже есть. Пуансон R47 выше — просто один заказ, не ТЗ на станок.
+- [Решение: 12 кВт, газы, цех](./docs/zakupka-lazera-2026.md)
 - Промпт: [`.cursor/prompts/laserprof-director-stanok.md`](./.cursor/prompts/laserprof-director-stanok.md)
 
 ## Документы
