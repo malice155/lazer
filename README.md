@@ -18,7 +18,7 @@ python3 tools/generate_punch_r47_amada_dxf.py
 
 ## Закупка лазера мощнее L3030
 Job-shop, **без азота** (O₂ + воздух), кран 3 т уже есть. Пуансон R47 выше — просто один заказ, не ТЗ на станок.
-- [Решение: 12 кВт, газы, цех](./docs/zakupka-lazera-2026.md)
+- [Варианты с ценами, за и против, деньги, цех](./docs/zakupka-lazera-2026.md) — вывод: **fiber 12 кВт 3015 на Raycus CE, станок 7,8–8,9 млн ₽, проект 9,5–13,5 млн**
 - Промпт: [`.cursor/prompts/laserprof-director-stanok.md`](./.cursor/prompts/laserprof-director-stanok.md)
 
 ## Документы
