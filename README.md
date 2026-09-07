@@ -16,5 +16,17 @@
 python3 tools/generate_punch_r47_amada_dxf.py
 ```
 
+## 3D-детали (CadQuery → КОМПАС)
+
+Параметрика в `cad/`, выдача — STEP. КОМПАС/SolidWorks покупать для генерации не нужно.
+
+```bash
+bash cad/install.sh
+cad/.venv/bin/python cad/build.py
+```
+
+Открыть `cad/out/*.step` в КОМПАС. Скилы команды: `.cursor/skills/`.
+
 ## Документы
 - [Подбор оснастки 30.00.01.002](./podbor-osnastki-30.00.01.002.md)
+- [CAD-пайплайн](./cad/README.md)

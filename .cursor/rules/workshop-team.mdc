@@ -1,0 +1,10 @@
+---
+description: Physical parts, CAD, STEP, КОМПАС, DXF, hydrofoil, tooling
+globs:
+  - cad/**
+  - dxf/**
+  - tools/**
+  - .cursor/skills/**
+---
+
+When the task is a physical part, чертеж, оснастка, CAD, or export to КОМПАС, read `.cursor/skills/workshop-lead/SKILL.md` first, then the matching specialist skill. Do not invent mounting dimensions. Pipeline: CadQuery → `cad/out/*.step` → КОМПАС.
