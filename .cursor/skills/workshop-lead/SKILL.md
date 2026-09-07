@@ -15,6 +15,7 @@ description: Use when designing a physical part, CAD model, чертеж, дет
 | Технолог | `manufacturing-technologist` | лазер, гибка, ЧПУ, печать |
 | Расчётчик | `engineering-analyst` | прочность, гидродинамика, материал |
 | Разработчик пайплайна | `cad-developer` | CadQuery, venv, `cad/build.py` |
+| Tohatsu 9.8 | `tohatsu-hydrofoil` | гидрокрыло M9.8B / клоны |
 
 В этом репозитории уже есть лазер/гибочный контур (`dxf/`, `tools/`) и 3D-контур (`cad/`).
 

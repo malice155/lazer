@@ -12,11 +12,13 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from lib import export_solid, verify_step  # noqa: E402
-from parts import demo_bracket, hydrofoil_demo  # noqa: E402
+from parts import demo_bracket, hydrofoil_demo, tohatsu_m98_hydrofoil  # noqa: E402
 
 PARTS = {
     demo_bracket.NAME: demo_bracket,
     hydrofoil_demo.NAME: hydrofoil_demo,
+    tohatsu_m98_hydrofoil.NAME: tohatsu_m98_hydrofoil,
+    tohatsu_m98_hydrofoil.CLAMP_NAME: tohatsu_m98_hydrofoil.ClampPart,
 }
 
 
@@ -35,6 +37,8 @@ def main() -> int:
         mod = PARTS[name]
         part = mod.build()
         paths = export_solid(part, name, **getattr(mod, "SHOW", {}))
+        if "dxf" in paths and hasattr(mod, "post_dxf"):
+            mod.post_dxf(paths["dxf"])
         verify_step(paths["step"])
         bb = part.val().BoundingBox()
         print(
@@ -42,7 +46,13 @@ def main() -> int:
             f"{bb.xlen:.1f}×{bb.ylen:.1f}×{bb.zlen:.1f} mm  "
             f"{paths['step'].stat().st_size} bytes"
         )
-        print(f"  → open in КОМПАС: {paths['step']}")
+        extra = f"  DXF {paths['dxf'].name}" if "dxf" in paths else ""
+        print(f"  → КОМПАС: {paths['step']}{extra}")
+    if tohatsu_m98_hydrofoil.NAME in names:
+        print(
+            "MEASURE before cutting metal: LEG_NOTCH_W, AV_PLATE_W, AV_PLATE_THICK "
+            "on the real Tohatsu 9.8 anti-cav plate. Defaults are not factory CAD."
+        )
     return 0
 
 

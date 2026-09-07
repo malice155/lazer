@@ -27,6 +27,8 @@ cad/.venv/bin/python cad/build.py
 
 Открыть `cad/out/*.step` в КОМПАС. Скилы команды: `.cursor/skills/`.
 
+Гидрокрыло Tohatsu 9.8: [`cad/tohatsu-m98.md`](./cad/tohatsu-m98.md), сборка `cad/.venv/bin/python cad/build.py tohatsu-m98-hydrofoil`.
+
 ## Документы
 - [Подбор оснастки 30.00.01.002](./podbor-osnastki-30.00.01.002.md)
 - [CAD-пайплайн](./cad/README.md)

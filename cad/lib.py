@@ -31,6 +31,16 @@ def export_solid(
     exporters.export(part, str(paths["step"]))
     exporters.export(part, str(paths["stl"]))
     exporters.export(part, str(paths["svg"]))
+    dxf = OUT_DIR / f"{stem}.dxf"
+    try:
+        exporters.exportDXF(part.section(), str(dxf), approx="arc")
+        paths["dxf"] = dxf
+    except Exception:
+        try:
+            exporters.exportDXF(part.faces("<Z"), str(dxf), approx="arc")
+            paths["dxf"] = dxf
+        except Exception:
+            pass
     if screenshot:
         show(
             part,
