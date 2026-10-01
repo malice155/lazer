@@ -18,3 +18,4 @@ python3 tools/generate_punch_r47_amada_dxf.py
 
 ## Документы
 - [Подбор оснастки 30.00.01.002](./podbor-osnastki-30.00.01.002.md)
+- [Машина на века](./docs/mashina-na-veka.md) — какой лазер брать на десятилетия
