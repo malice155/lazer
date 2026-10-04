@@ -17,6 +17,7 @@ from parts import (  # noqa: E402
     granta_bmw_seat_rail,
     hydrofoil_demo,
     tlc120_bmw_seat_rail,
+    tlc120_e39_seat,
     tohatsu_m98_hydrofoil,
 )
 
@@ -29,6 +30,9 @@ PARTS = {
     granta_bmw_seat_rail.PAIR_NAME: granta_bmw_seat_rail.Pair,
     tlc120_bmw_seat_rail.NAME: tlc120_bmw_seat_rail,
     tlc120_bmw_seat_rail.PAIR_NAME: tlc120_bmw_seat_rail.Pair,
+    tlc120_e39_seat.NAME_OUTER: tlc120_e39_seat.Outer,
+    tlc120_e39_seat.NAME_INNER: tlc120_e39_seat.Inner,
+    tlc120_e39_seat.NAME_SEAT: tlc120_e39_seat.Seat,
 }
 
 
@@ -51,6 +55,8 @@ def main() -> int:
         paths = export_solid(part, name, **getattr(mod, "SHOW", {}))
         if "dxf" in paths and hasattr(mod, "post_dxf"):
             mod.post_dxf(paths["dxf"])
+            if not paths["dxf"].exists():
+                del paths["dxf"]
         verify_step(paths["step"])
         bb = part.val().BoundingBox()
         nsolids = len(part.solids().vals())
@@ -73,6 +79,17 @@ def main() -> int:
             "MEASURE before cutting metal: Prado 120 floor-bolt pitch "
             f"(slot accepts up to {pitch:.1f} mm) and the distance between "
             "the two bolt lines. FLOOR_WIDTH in the pair STEP is a placeholder."
+        )
+    if (
+        tlc120_e39_seat.NAME_OUTER in names
+        or tlc120_e39_seat.NAME_INNER in names
+        or tlc120_e39_seat.NAME_SEAT in names
+    ):
+        print(
+            "MEASURE before bending: FLOOR_STEP between the Prado bolt lines, "
+            "FLOOR_WIDTH, and the E39 bolt diameter. "
+            f"Flat pitch up to {tlc120_e39_seat.max_floor_pitch():.1f} mm. "
+            "Die V32, gooseneck punch, not the R47 punch."
         )
     return 0
 

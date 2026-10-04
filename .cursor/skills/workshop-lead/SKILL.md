@@ -15,6 +15,7 @@ description: Use when designing a physical part, CAD model, чертеж, дет
 | Конструктор 3D | `cad-constructor` + `cadquery-brep` | геометрия, отверстия, STEP |
 | FreeCAD | `freecad-bridge` | скрипт или правка в окне FreeCAD |
 | Технолог | `manufacturing-technologist` + `dfm-review` | лазер, гибка, печать, «можно резать?» |
+| Гибка листа | `sheet-brake` | пресс, развёртка, припуск гиба, канал |
 | Расчётчик | `engineering-analyst` | прочность, гидродинамика, материал |
 | Разработчик пайплайна | `cad-developer` | venv, `cad/build.py` |
 | Tohatsu 9.8 | `tohatsu-hydrofoil` | гидрокрыло M9.8B / клоны |
