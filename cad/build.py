@@ -32,6 +32,7 @@ PARTS = {
     tlc120_bmw_seat_rail.PAIR_NAME: tlc120_bmw_seat_rail.Pair,
     tlc120_e39_seat.NAME_OUTER: tlc120_e39_seat.Outer,
     tlc120_e39_seat.NAME_INNER: tlc120_e39_seat.Inner,
+    tlc120_e39_seat.NAME_PLATE: tlc120_e39_seat.Plate,
     tlc120_e39_seat.NAME_SEAT: tlc120_e39_seat.Seat,
 }
 
@@ -83,13 +84,14 @@ def main() -> int:
     if (
         tlc120_e39_seat.NAME_OUTER in names
         or tlc120_e39_seat.NAME_INNER in names
+        or tlc120_e39_seat.NAME_PLATE in names
         or tlc120_e39_seat.NAME_SEAT in names
     ):
         print(
-            "MEASURE before bending: FLOOR_STEP between the Prado bolt lines, "
-            "FLOOR_WIDTH, and the E39 bolt diameter. "
-            f"Flat pitch up to {tlc120_e39_seat.max_floor_pitch():.1f} mm. "
-            "Die V32, gooseneck punch, not the R47 punch."
+            "MEASURE before bending: FLOOR_STEP, FLOOR_WIDTH, "
+            f"FLOOR_PITCH {tlc120_e39_seat.FLOOR_PITCH:.0f} mm and "
+            f"SEAT_PITCH {tlc120_e39_seat.SEAT_PITCH:.0f} mm. "
+            "Holes, not slots. Die V32, gooseneck punch, not the R47 punch."
         )
     return 0
 
