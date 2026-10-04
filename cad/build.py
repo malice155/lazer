@@ -16,6 +16,7 @@ from parts import (  # noqa: E402
     demo_bracket,
     granta_bmw_seat_rail,
     hydrofoil_demo,
+    tlc120_bmw_seat_rail,
     tohatsu_m98_hydrofoil,
 )
 
@@ -26,6 +27,8 @@ PARTS = {
     tohatsu_m98_hydrofoil.CLAMP_NAME: tohatsu_m98_hydrofoil.ClampPart,
     granta_bmw_seat_rail.NAME: granta_bmw_seat_rail,
     granta_bmw_seat_rail.PAIR_NAME: granta_bmw_seat_rail.Pair,
+    tlc120_bmw_seat_rail.NAME: tlc120_bmw_seat_rail,
+    tlc120_bmw_seat_rail.PAIR_NAME: tlc120_bmw_seat_rail.Pair,
 }
 
 
@@ -50,10 +53,12 @@ def main() -> int:
             mod.post_dxf(paths["dxf"])
         verify_step(paths["step"])
         bb = part.val().BoundingBox()
+        nsolids = len(part.solids().vals())
+        solid_note = f"  solids={nsolids}" if nsolids > 1 else ""
         print(
             f"{name}: STEP {paths['step'].name}  "
             f"{bb.xlen:.1f}×{bb.ylen:.1f}×{bb.zlen:.1f} mm  "
-            f"{paths['step'].stat().st_size} bytes"
+            f"{paths['step'].stat().st_size} bytes{solid_note}"
         )
         extra = f"  DXF {paths['dxf'].name}" if "dxf" in paths else ""
         print(f"  → КОМПАС: {paths['step']}{extra}")
@@ -61,6 +66,13 @@ def main() -> int:
         print(
             "MEASURE before cutting metal: LEG_NOTCH_W, AV_PLATE_W, AV_PLATE_THICK "
             "on the real Tohatsu 9.8 anti-cav plate. Defaults are not factory CAD."
+        )
+    if tlc120_bmw_seat_rail.NAME in names or tlc120_bmw_seat_rail.PAIR_NAME in names:
+        pitch = tlc120_bmw_seat_rail.max_floor_pitch()
+        print(
+            "MEASURE before cutting metal: Prado 120 floor-bolt pitch "
+            f"(slot accepts up to {pitch:.1f} mm) and the distance between "
+            "the two bolt lines. FLOOR_WIDTH in the pair STEP is a placeholder."
         )
     return 0
 

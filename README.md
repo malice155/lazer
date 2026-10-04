@@ -29,6 +29,8 @@ cad/.venv/bin/python cad/build.py
 
 Гидрокрыло Tohatsu 9.8: [`cad/tohatsu-m98.md`](./cad/tohatsu-m98.md), сборка `cad/.venv/bin/python cad/build.py tohatsu-m98-hydrofoil`.
 
+Салазки сиденья BMW: Гранта [`cad/granta-bmw-seat.md`](./cad/granta-bmw-seat.md), Prado 120 [`cad/tlc120-bmw-seat.md`](./cad/tlc120-bmw-seat.md).
+
 ## Документы
 - [Подбор оснастки 30.00.01.002](./podbor-osnastki-30.00.01.002.md)
 - [CAD-пайплайн](./cad/README.md)

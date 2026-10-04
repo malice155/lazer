@@ -40,8 +40,14 @@ def _granta_points() -> list[tuple[float, float]]:
     return [(half, 0.0), (-half, 0.0)]
 
 
-def _inside(shape: cq.Shape, x: float, y: float) -> bool:
-    return shape.isInside(cq.Vector(x, y, THICKNESS / 2.0))
+def _inside(shape: cq.Shape, x: float, y: float, z: float) -> bool:
+    return shape.isInside(cq.Vector(x, y, z))
+
+
+def _through(shape: cq.Shape, x: float, y: float) -> bool:
+    """Void near both faces. A cut from z=0 upward leaves a blind pocket."""
+    top = THICKNESS / 2.0 - 0.3
+    return not _inside(shape, x, y, top) and not _inside(shape, x, y, -top)
 
 
 def audit(shape: cq.Shape, *, clamp: bool = False) -> None:
@@ -52,15 +58,16 @@ def audit(shape: cq.Shape, *, clamp: bool = False) -> None:
     n = len(shape.Solids())
     if n not in (1, 2):
         raise RuntimeError(f"expected 1 rail or a pair, got {n} solids")
-    if _inside(shape, GRANTA_PITCH / 2.0, 0.0):
-        raise RuntimeError("Granta hole is filled")
-    if _inside(shape, 0.0, SLOT_Y):
-        raise RuntimeError("BMW slot is filled")
+    if not _through(shape, GRANTA_PITCH / 2.0, 0.0):
+        raise RuntimeError("Granta hole is not through")
+    if not _through(shape, 0.0, SLOT_Y):
+        raise RuntimeError("BMW slot is not through")
     # Metal between the floor hole and the nearest slot.
     gap_y = SLOT_Y - SLOT_W / 2.0 - GRANTA_BOLT_D / 2.0
     if gap_y < 2.0 * THICKNESS:
         raise RuntimeError(f"slot too close to floor hole: {gap_y:.1f} mm")
-    if not _inside(shape, GRANTA_PITCH / 2.0, gap_y / 2.0 + GRANTA_BOLT_D / 2.0):
+    web_y = GRANTA_BOLT_D / 2.0 + gap_y / 2.0
+    if not _inside(shape, GRANTA_PITCH / 2.0, web_y, 0.0):
         raise RuntimeError("web between hole and slot is missing")
 
 
@@ -75,13 +82,13 @@ def build() -> cq.Workplane:
         cq.Workplane("XY")
         .pushPoints(_granta_points())
         .circle(GRANTA_BOLT_D / 2.0)
-        .extrude(THICKNESS + 2.0)
+        .extrude(THICKNESS + 2.0, both=True)
     )
     slots = (
         cq.Workplane("XY")
         .pushPoints([(0.0, SLOT_Y), (0.0, -SLOT_Y)])
         .slot2D(SLOT_LEN, SLOT_W, 0.0)
-        .extrude(THICKNESS + 2.0)
+        .extrude(THICKNESS + 2.0, both=True)
     )
     part = plate.cut(cutouts).cut(slots)
     audit(part.val())
