@@ -12,13 +12,20 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from lib import export_solid, verify_step  # noqa: E402
-from parts import demo_bracket, hydrofoil_demo, tohatsu_m98_hydrofoil  # noqa: E402
+from parts import (  # noqa: E402
+    demo_bracket,
+    granta_bmw_seat_rail,
+    hydrofoil_demo,
+    tohatsu_m98_hydrofoil,
+)
 
 PARTS = {
     demo_bracket.NAME: demo_bracket,
     hydrofoil_demo.NAME: hydrofoil_demo,
     tohatsu_m98_hydrofoil.NAME: tohatsu_m98_hydrofoil,
     tohatsu_m98_hydrofoil.CLAMP_NAME: tohatsu_m98_hydrofoil.ClampPart,
+    granta_bmw_seat_rail.NAME: granta_bmw_seat_rail,
+    granta_bmw_seat_rail.PAIR_NAME: granta_bmw_seat_rail.Pair,
 }
 
 

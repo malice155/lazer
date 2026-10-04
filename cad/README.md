@@ -13,4 +13,4 @@ cad/.venv/bin/python cad/build.py
 | `cad/out/*.stl` | 3D-печать прототипа |
 | `cad/out/*.png` | превью |
 
-Сейчас в сборке: `demo-bracket`, `hydrofoil-demo` (шаблон) и **`tohatsu-m98-hydrofoil`** + зажимы — см. [tohatsu-m98.md](./tohatsu-m98.md).
+Сейчас в сборке: `demo-bracket`, `hydrofoil-demo`, **`tohatsu-m98-hydrofoil`** ([карточка](./tohatsu-m98.md)) и **`granta-bmw-seat-rail`** — переходник сиденья BMW на Гранту ([карточка](./granta-bmw-seat.md)).
