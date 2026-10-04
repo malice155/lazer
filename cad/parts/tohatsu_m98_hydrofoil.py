@@ -5,7 +5,7 @@ PROMPT
 Спроектировать гидрокрыло на антикавитационную плиту Tohatsu 9.8 (самый
 частый у нас — 2-такт M9.8B / Nissan NS9.8 / клоны Sea-Pro, Parsun, HDX).
 Не сверлить редуктор: U-вырез + зажимные планки. Параметры в мм наверху
-файла. Выход: STEP в КОМПАС, DXF на лазер (лист АМГ 3 мм), STL прототип.
+файла. Выход: STEP уже с гибами 15° вниз, DXF — плоская развёртка на лазер.
 Вырез и ширину плиты пометить MEASURE — официального размера АКП нет.
 Задняя кромка крыла — впереди плоскости винта. Это прикидка, не ГОСТ.
 
@@ -20,6 +20,8 @@ PROMPT
 """
 
 from __future__ import annotations
+
+import math
 
 import cadquery as cq
 
@@ -49,7 +51,14 @@ CLAMP_OVERLAP = 28.0  # how far the strap goes under the plate
 HOLE_FROM_TE = 32.0
 HOLE_SPACING_X = 48.0
 
-SHOW = {"roll": 0.0, "elevation": -70.0, "azimuth": 18.0, "zoom": 1.0}
+# Two brakes, tips down. Inner radius = sheet thickness. Flange at the
+# narrow (leading) end stays longer than a V24 die.
+BEND_ANGLE = 15.0
+BEND_R = 3.0
+BEND_K = 0.4
+FLANGE_AT_LE = 32.0
+
+SHOW = {"roll": -12.0, "elevation": -22.0, "azimuth": 48.0, "zoom": 1.05}
 SHOW_CLAMP = {"roll": 0.0, "elevation": -80.0, "azimuth": 20.0, "zoom": 1.2}
 
 
@@ -59,6 +68,15 @@ def _notch_half() -> float:
 
 def _bolt_y() -> float:
     return AV_PLATE_W / 2.0 + BOLT_OUTBOARD
+
+
+def _y_bend() -> float:
+    """Bend tangent, measured from the centerline. Same on both tips."""
+    return SPAN_LE / 2.0 - FLANGE_AT_LE
+
+
+def _bend_allowance() -> float:
+    return math.radians(BEND_ANGLE) * (BEND_R + BEND_K * THICKNESS)
 
 
 def bolt_points() -> list[tuple[float, float]]:
@@ -126,12 +144,43 @@ def audit(shape: cq.Shape, *, clamp: bool = False) -> None:
         if HOLE_FROM_TE - radius < min_wall:
             raise RuntimeError("slot too close to the trailing edge")
     if not clamp:
-        bend_gap = (SPAN_TE / 2.0 - 40.0) - (_bolt_y() + half)
+        bend_gap = _y_bend() - (_bolt_y() + half)
         if bend_gap < min_wall:
             raise RuntimeError(f"bend line too close to slot: {bend_gap:.1f} mm")
+        # Mid-thickness of the +Y flange, 18 mm past the tangent, must sit below the sheet.
+        if not shape.isInside(cq.Vector(CHORD * 0.75, _y_bend() + 20.0, -3.0)):
+            raise RuntimeError("tip did not bend down")
 
 
-def build() -> cq.Workplane:
+def _tip_profile(straight: float) -> cq.Workplane:
+    """Cross-section in YZ: inner radius, then a straight flange downward."""
+    angle = math.radians(BEND_ANGLE)
+    ca, sa = math.cos(angle), math.sin(angle)
+    radius = BEND_R
+    thick = THICKNESS
+    inner_arc = (radius * sa, -radius + radius * ca)
+    outer_arc = ((radius + thick) * sa, -radius + (radius + thick) * ca)
+    inner_end = (inner_arc[0] + straight * ca, inner_arc[1] - straight * sa)
+    outer_end = (outer_arc[0] + straight * ca, outer_arc[1] - straight * sa)
+    return (
+        cq.Workplane("YZ")
+        .moveTo(0, 0)
+        .lineTo(*inner_arc)
+        .lineTo(*inner_end)
+        .lineTo(*outer_end)
+        .lineTo(*outer_arc)
+        .radiusArc((0, thick), -(radius + thick))
+        .close()
+    )
+
+
+def _planform_prism() -> cq.Workplane:
+    sheet = outline().extrude(THICKNESS).edges("|Z").fillet(CORNER_FILLET)
+    return sheet.faces(">Z").wires().toPending().extrude(-60)
+
+
+def build_flat() -> cq.Workplane:
+    """Laser blank. Bend lines are drawn on this, not cut."""
     plate = outline().extrude(THICKNESS)
     plate = plate.edges("|Z").fillet(CORNER_FILLET)
     holes = (
@@ -140,9 +189,27 @@ def build() -> cq.Workplane:
         .slot2D(SLOT_LEN, BOLT_D, 90.0)
         .extrude(THICKNESS + 2.0)
     )
-    part = plate.cut(holes)
-    audit(part.val())
-    return part
+    return plate.cut(holes)
+
+
+def build() -> cq.Workplane:
+    """Formed part: flat centre, both tips bent down."""
+    flat = build_flat()
+    y_bend = _y_bend()
+    guard = (
+        cq.Workplane("XY")
+        .box(CHORD + 80.0, 2.0 * y_bend + 0.1, THICKNESS + 8.0)
+        .translate((CHORD / 2.0, 0.0, THICKNESS / 2.0))
+    )
+    center = flat.intersect(guard)
+    # Longest flat flange is at the trailing edge; the planform prism trims the rest.
+    straight = (SPAN_TE / 2.0 - y_bend) - _bend_allowance()
+    bar = _tip_profile(straight).extrude(CHORD + 40.0).translate((-20.0, y_bend, 0.0))
+    prism = _planform_prism()
+    positive = bar.intersect(prism)
+    formed = center.union(positive).union(positive.mirror("XZ"))
+    audit(formed.val())
+    return formed
 
 
 def build_clamp() -> cq.Workplane:
@@ -175,10 +242,12 @@ def build_clamp() -> cq.Workplane:
 
 
 def post_dxf(path) -> None:
-    """Shop layers: CUT (laser) + BEND (optional 15° tip downturn on the brake)."""
+    """Flat laser blank. CUT is the contour, BEND is the brake line — do not cut it."""
     import ezdxf
     from ezdxf import colors
+    from cadquery import exporters
 
+    exporters.exportDXF(build_flat().section(), str(path), approx="arc")
     doc = ezdxf.readfile(str(path))
     if "CUT" not in doc.layers:
         doc.layers.add("CUT", color=colors.RED)
@@ -186,15 +255,12 @@ def post_dxf(path) -> None:
         doc.layers.add("BEND", color=colors.YELLOW)
     msp = doc.modelspace()
     for ent in msp:
-        if ent.dxf.layer != "BEND":
-            ent.dxf.layer = "CUT"
-    y_bend = SPAN_TE / 2.0 - 40.0
+        ent.dxf.layer = "CUT"
+    y_bend = _y_bend()
+    note = f"BEND {BEND_ANGLE:.0f}deg DOWN  Rin {BEND_R:.0f}  x2  do not cut"
+    msp.add_text(note, dxfattribs={"layer": "BEND", "height": 5}).set_placement((16.0, 8.0))
     for y in (y_bend, -y_bend):
-        msp.add_line(
-            (18.0, y),
-            (CHORD - 12.0, y),
-            dxfattribs={"layer": "BEND"},
-        )
+        msp.add_line((2.0, y), (CHORD - 2.0, y), dxfattribs={"layer": "BEND"})
     doc.saveas(str(path))
 
 
