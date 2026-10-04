@@ -16,5 +16,21 @@
 python3 tools/generate_punch_r47_amada_dxf.py
 ```
 
+## 3D-детали (CadQuery → КОМПАС)
+
+Параметрика в `cad/`, выдача — STEP. Для генерации стоит CadQuery. FreeCAD — бесплатный просмотр. КОМПАС — если нужен чертёж. SolidWorks не нужен.
+
+```bash
+bash cad/install.sh
+cad/.venv/bin/python cad/build.py
+```
+
+Открыть `cad/out/*.step` в КОМПАС. Скилы команды: `.cursor/skills/`.
+
+Гидрокрыло Tohatsu 9.8: [`cad/tohatsu-m98.md`](./cad/tohatsu-m98.md), сборка `cad/.venv/bin/python cad/build.py tohatsu-m98-hydrofoil`.
+
+Салазки сиденья BMW: Гранта [`cad/granta-bmw-seat.md`](./cad/granta-bmw-seat.md). Prado 120 — гнутый кронштейн под E39 [`cad/tlc120-e39-seat.md`](./cad/tlc120-e39-seat.md).
+
 ## Документы
 - [Подбор оснастки 30.00.01.002](./podbor-osnastki-30.00.01.002.md)
+- [CAD-пайплайн](./cad/README.md)

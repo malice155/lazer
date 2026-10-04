@@ -1,1 +1,4 @@
 tools/__pycache__/
+cad/.venv/
+cad/**/__pycache__/
+*.pyc
