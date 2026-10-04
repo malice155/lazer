@@ -7,4 +7,4 @@ globs:
   - .cursor/skills/**
 ---
 
-When the task is a physical part, чертеж, оснастка, CAD, or export to КОМПАС, read `.cursor/skills/workshop-lead/SKILL.md` first, then the matching specialist skill. Do not invent mounting dimensions. Pipeline: CadQuery → `cad/out/*.step` → КОМПАС.
+When the task is a physical part, чертеж, оснастка, CAD, or which CAD program to use, read `.cursor/skills/constructor-stack/SKILL.md` and `.cursor/skills/workshop-lead/SKILL.md`, then the matching specialist skill. Do not invent mounting dimensions. Pipeline: CadQuery → `cad/out/*.step` → КОМПАС or FreeCAD. SolidWorks is not required.

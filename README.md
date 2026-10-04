@@ -18,7 +18,7 @@ python3 tools/generate_punch_r47_amada_dxf.py
 
 ## 3D-детали (CadQuery → КОМПАС)
 
-Параметрика в `cad/`, выдача — STEP. КОМПАС/SolidWorks покупать для генерации не нужно.
+Параметрика в `cad/`, выдача — STEP. Для генерации стоит CadQuery. FreeCAD — бесплатный просмотр. КОМПАС — если нужен чертёж. SolidWorks не нужен.
 
 ```bash
 bash cad/install.sh

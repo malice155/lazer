@@ -11,10 +11,12 @@ description: Use when designing a physical part, CAD model, чертеж, дет
 
 | Роль | Скил | Когда |
 |---|---|---|
-| Конструктор 3D | `cad-constructor` | геометрия, отверстия, STEP |
-| Технолог | `manufacturing-technologist` | лазер, гибка, ЧПУ, печать |
+| Стек программ | `constructor-stack` | CadQuery / FreeCAD / КОМПАС / SolidWorks |
+| Конструктор 3D | `cad-constructor` + `cadquery-brep` | геометрия, отверстия, STEP |
+| FreeCAD | `freecad-bridge` | скрипт или правка в окне FreeCAD |
+| Технолог | `manufacturing-technologist` + `dfm-review` | лазер, гибка, печать, «можно резать?» |
 | Расчётчик | `engineering-analyst` | прочность, гидродинамика, материал |
-| Разработчик пайплайна | `cad-developer` | CadQuery, venv, `cad/build.py` |
+| Разработчик пайплайна | `cad-developer` | venv, `cad/build.py` |
 | Tohatsu 9.8 | `tohatsu-hydrofoil` | гидрокрыло M9.8B / клоны |
 
 В этом репозитории уже есть лазер/гибочный контур (`dxf/`, `tools/`) и 3D-контур (`cad/`).

@@ -1,6 +1,6 @@
-# CAD-пайплайн (CadQuery → STEP → КОМПАС)
+# CAD-пайплайн (CadQuery → STEP → КОМПАС или FreeCAD)
 
-Ничего покупать не нужно. КОМПАС — только чтобы открыть готовый `.step` у себя.
+Конструктор работает в **CadQuery**. Покупать SolidWorks не нужно. КОМПАС и FreeCAD — чтобы открыть готовый `.step` у себя.
 
 ```bash
 bash cad/install.sh
