@@ -88,6 +88,49 @@ def outline() -> cq.Workplane:
     )
 
 
+def _inside(shape: cq.Shape, x: float, y: float) -> bool:
+    return shape.isInside(cq.Vector(x, y, THICKNESS / 2.0))
+
+
+def audit(shape: cq.Shape, *, clamp: bool = False) -> None:
+    """DFM: slots are open, metal remains around them, bend line clears the slots."""
+    if not shape.isValid():
+        raise RuntimeError("solid is not valid")
+    if len(shape.Solids()) != 1:
+        raise RuntimeError("expected one solid")
+    # The U-notch is empty; the plate beside it is not.
+    if not clamp and _inside(shape, LEG_NOTCH_DEPTH / 2.0, 0.0):
+        raise RuntimeError("leg notch is filled")
+    if not clamp and not _inside(shape, LEG_NOTCH_DEPTH / 2.0, LEG_NOTCH_W / 2.0 + 8.0):
+        raise RuntimeError("plate beside the notch is missing")
+    half = SLOT_LEN / 2.0
+    radius = BOLT_D / 2.0
+    min_wall = 2.0 * THICKNESS
+    points = (
+        [(CHORD - HOLE_FROM_TE, _bolt_y()), (CHORD - HOLE_FROM_TE - HOLE_SPACING_X, _bolt_y())]
+        if clamp
+        else bolt_points()
+    )
+    for x, y in points:
+        if _inside(shape, x, y):
+            raise RuntimeError(f"slot still filled at {x},{y}")
+        sign = 1.0 if y > 0 else -1.0
+        for px, py in (
+            (x, y + sign * (half + 2.0)),
+            (x, y - sign * (half + 2.0)),
+            (x - (radius + 2.0), y),
+            (x + (radius + 2.0), y),
+        ):
+            if not _inside(shape, px, py):
+                raise RuntimeError(f"slot breaks the edge at {px:.1f},{py:.1f}")
+        if HOLE_FROM_TE - radius < min_wall:
+            raise RuntimeError("slot too close to the trailing edge")
+    if not clamp:
+        bend_gap = (SPAN_TE / 2.0 - 40.0) - (_bolt_y() + half)
+        if bend_gap < min_wall:
+            raise RuntimeError(f"bend line too close to slot: {bend_gap:.1f} mm")
+
+
 def build() -> cq.Workplane:
     plate = outline().extrude(THICKNESS)
     plate = plate.edges("|Z").fillet(CORNER_FILLET)
@@ -97,7 +140,9 @@ def build() -> cq.Workplane:
         .slot2D(SLOT_LEN, BOLT_D, 90.0)
         .extrude(THICKNESS + 2.0)
     )
-    return plate.cut(holes)
+    part = plate.cut(holes)
+    audit(part.val())
+    return part
 
 
 def build_clamp() -> cq.Workplane:
@@ -124,7 +169,9 @@ def build_clamp() -> cq.Workplane:
         .slot2D(SLOT_LEN, BOLT_D, 90.0)
         .extrude(THICKNESS + 2.0)
     )
-    return strap.cut(holes)
+    part = strap.cut(holes)
+    audit(part.val(), clamp=True)
+    return part
 
 
 def post_dxf(path) -> None:

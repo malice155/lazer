@@ -36,6 +36,8 @@ def main() -> int:
     for name in names:
         mod = PARTS[name]
         part = mod.build()
+        if hasattr(mod, "audit"):
+            mod.audit(part.val(), clamp=name.endswith("clamp"))
         paths = export_solid(part, name, **getattr(mod, "SHOW", {}))
         if "dxf" in paths and hasattr(mod, "post_dxf"):
             mod.post_dxf(paths["dxf"])
