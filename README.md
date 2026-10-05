@@ -29,7 +29,7 @@ cad/.venv/bin/python cad/build.py
 
 Гидрокрыло Tohatsu 9.8: [`cad/tohatsu-m98.md`](./cad/tohatsu-m98.md), сборка `cad/.venv/bin/python cad/build.py tohatsu-m98-hydrofoil`.
 
-Салазки сиденья BMW: Гранта [`cad/granta-bmw-seat.md`](./cad/granta-bmw-seat.md). Prado 120 — гнутый кронштейн под E39 [`cad/tlc120-e39-seat.md`](./cad/tlc120-e39-seat.md).
+Салазки сиденья BMW: Гранта [`cad/granta-bmw-seat.md`](./cad/granta-bmw-seat.md). Prado 120 — рама по замерам салазок, шильдик Brose `52107459217-04` [`cad/tlc120-bmw-comfort.md`](./cad/tlc120-bmw-comfort.md).
 
 ## Документы
 - [Подбор оснастки 30.00.01.002](./podbor-osnastki-30.00.01.002.md)

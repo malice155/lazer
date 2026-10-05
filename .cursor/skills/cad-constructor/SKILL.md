@@ -5,7 +5,7 @@ description: Use when building or editing 3D geometry with CadQuery, holes, fill
 
 # Конструктор 3D (CadQuery)
 
-Геометрия = Python (CadQuery). Перед кодом читай `cadquery-brep`. КОМПАС и SolidWorks не открываем: отдаём STEP. FreeCAD — только если просят окно или `.FCStd` (`freecad-bridge`).
+Геометрия = Python (CadQuery). Перед кодом читай `cadquery-brep`. Если деталь садится на машину, сиденье или мотор — сначала `designer`: незамеренное число в модель не идёт. КОМПАС и SolidWorks не открываем: отдаём STEP. FreeCAD — только если просят окно или `.FCStd` (`freecad-bridge`).
 
 ## Правила модели
 

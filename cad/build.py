@@ -16,8 +16,8 @@ from parts import (  # noqa: E402
     demo_bracket,
     granta_bmw_seat_rail,
     hydrofoil_demo,
+    tlc120_bmw_comfort,
     tlc120_bmw_seat_rail,
-    tlc120_e39_seat,
     tohatsu_m98_hydrofoil,
 )
 
@@ -30,9 +30,9 @@ PARTS = {
     granta_bmw_seat_rail.PAIR_NAME: granta_bmw_seat_rail.Pair,
     tlc120_bmw_seat_rail.NAME: tlc120_bmw_seat_rail,
     tlc120_bmw_seat_rail.PAIR_NAME: tlc120_bmw_seat_rail.Pair,
-    tlc120_e39_seat.NAME_OUTER: tlc120_e39_seat.Outer,
-    tlc120_e39_seat.NAME_INNER: tlc120_e39_seat.Inner,
-    tlc120_e39_seat.NAME_SEAT: tlc120_e39_seat.Seat,
+    tlc120_bmw_comfort.NAME_BRACKET: tlc120_bmw_comfort.Bracket,
+    tlc120_bmw_comfort.NAME_PLATE: tlc120_bmw_comfort.Plate,
+    tlc120_bmw_comfort.NAME_FRAME: tlc120_bmw_comfort.Frame,
 }
 
 
@@ -81,15 +81,16 @@ def main() -> int:
             "the two bolt lines. FLOOR_WIDTH in the pair STEP is a placeholder."
         )
     if (
-        tlc120_e39_seat.NAME_OUTER in names
-        or tlc120_e39_seat.NAME_INNER in names
-        or tlc120_e39_seat.NAME_SEAT in names
+        tlc120_bmw_comfort.NAME_BRACKET in names
+        or tlc120_bmw_comfort.NAME_PLATE in names
+        or tlc120_bmw_comfort.NAME_FRAME in names
     ):
         print(
-            "MEASURE before bending: FLOOR_STEP between the Prado bolt lines, "
-            "FLOOR_WIDTH, and the E39 bolt diameter. "
-            f"Flat pitch up to {tlc120_e39_seat.max_floor_pitch():.1f} mm. "
-            "Die V32, gooseneck punch, not the R47 punch."
+            "Measured centers only: "
+            f"{tlc120_bmw_comfort.FLOOR_PITCH:.0f} mm along a rail, "
+            f"{tlc120_bmw_comfort.FLOOR_WIDTH:.0f} mm between rails. "
+            "Hole diameter and floor step are not measured, so holes are "
+            "not cut. DXF layer CENTER is not a cut. Die V32, gooseneck."
         )
     return 0
 
