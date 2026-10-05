@@ -88,12 +88,11 @@ def main() -> int:
         or tlc120_e39_seat.NAME_SEAT in names
     ):
         print(
-            "MEASURE before bending: FLOOR_STEP, "
-            f"FLOOR_PITCH {tlc120_e39_seat.FLOOR_PITCH:.0f} mm and "
-            f"SEAT_PITCH {tlc120_e39_seat.SEAT_PITCH:.0f} mm. "
-            f"Rail spacing {tlc120_e39_seat.FLOOR_WIDTH:.0f} mm is measured "
-            "center to center. Holes, not slots. Die V32, gooseneck punch, "
-            "not the R47 punch."
+            "Floor bolts are measured: "
+            f"{tlc120_e39_seat.FLOOR_PITCH:.0f} mm along a rail, "
+            f"{tlc120_e39_seat.FLOOR_WIDTH:.0f} mm between rails. "
+            "FLOOR_STEP is not measured. Holes, not slots. "
+            "Die V32, gooseneck punch, not the R47 punch."
         )
     return 0
 

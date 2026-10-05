@@ -8,10 +8,10 @@ twist and slide, so this seat sits on a frame:
 - one bent rail on the tunnel side, shorter web by FLOOR_STEP
 - one flat tie plate bolted across both top flanges
 
-Four holes, not slots. Floor holes and seat holes share the same X when
-FLOOR_PITCH equals SEAT_PITCH, so the load goes straight through the web.
-FLOOR_WIDTH is the measured center distance between the two rails.
-Both pitches and the floor step are still MEASURE.
+Four holes, not slots. The holes sit on the measured floor pattern:
+520 mm along each rail, 420 mm between the rails. The plate uses the
+same four centers. No second pitch is drawn in for the E39 rail.
+FLOOR_STEP is still not measured.
 
 Brake: 4 mm steel, two bends 90°, inside radius 4 mm, die V32.
 Promecam tang 13 mm. The R47 punch in dxf/ is a different tool.
@@ -54,10 +54,9 @@ END_MARGIN = 25.0
 # Metal past each seat-hole line, on the tie plate.
 PLATE_MARGIN = 28.0
 
-# MEASURE. Fore-aft distance between bolt centers. Split them if the
-# Prado line and the E39 rail do not share one pitch.
-FLOOR_PITCH = 400.0
-SEAT_PITCH = 400.0
+# Center distance along one rail between the two floor-bolt holes.
+# Measured on the TLC 120 BMW-seat rails.
+FLOOR_PITCH = 520.0
 
 # Prado bolt 90119-10921, Toyota 90119-10 series: M10. Confirm on the car.
 FLOOR_BOLT_D = 10.5
@@ -79,7 +78,7 @@ def _ba() -> float:
 
 
 def rail_length() -> float:
-    return max(FLOOR_PITCH, SEAT_PITCH) + 2.0 * END_MARGIN
+    return FLOOR_PITCH + 2.0 * END_MARGIN
 
 
 def hole_y() -> float:
@@ -151,7 +150,7 @@ def build_bracket(web: float) -> cq.Workplane:
     for x in _stations(FLOOR_PITCH):
         hole = _hole(x, y, FLOOR_BOLT_D, -1.0, THICKNESS + 1.0)
         cut = hole if cut is None else cut.union(hole)
-    for x in _stations(SEAT_PITCH):
+    for x in _stations(FLOOR_PITCH):
         hole = _hole(x, y, E39_BOLT_D, h["under"] - 1.0, h["top"] + 1.0)
         cut = cut.union(hole)
     part = body.cut(cut)
@@ -180,7 +179,7 @@ def _audit_bracket(shape: cq.Shape, web: float) -> None:
     for x in _stations(FLOOR_PITCH):
         if _inside(shape, x, y, THICKNESS / 2.0):
             raise RuntimeError("floor hole is filled")
-    for x in _stations(SEAT_PITCH):
+    for x in _stations(FLOOR_PITCH):
         if _inside(shape, x, y, z_top_mid):
             raise RuntimeError("E39 hole is filled")
     if not _inside(shape, 0, y, THICKNESS / 2.0):
@@ -198,7 +197,7 @@ def _audit_bracket(shape: cq.Shape, web: float) -> None:
     if not _edge_ok(y, -BEND_R - TOP, E39_BOLT_D):
         raise RuntimeError("E39 hole too close to the tip")
     half = rail_length() / 2.0
-    for x in _stations(max(FLOOR_PITCH, SEAT_PITCH)):
+    for x in _stations(FLOOR_PITCH):
         if not _edge_ok(x, math.copysign(half, x), FLOOR_BOLT_D):
             raise RuntimeError("hole too close to the rail end")
     bb = shape.BoundingBox()
@@ -215,8 +214,8 @@ def build_inner() -> cq.Workplane:
 
 
 def build_plate() -> cq.Workplane:
-    """Flat diaphragm. Four holes, same places as the seat holes on the rails."""
-    length = SEAT_PITCH + 2.0 * END_MARGIN
+    """Flat diaphragm. Four holes on the measured floor centers."""
+    length = FLOOR_PITCH + 2.0 * END_MARGIN
     width = FLOOR_WIDTH + 2.0 * PLATE_MARGIN
     plate = (
         cq.Workplane("XY")
@@ -224,7 +223,7 @@ def build_plate() -> cq.Workplane:
         .translate((0, FLOOR_WIDTH / 2.0, THICKNESS / 2.0))
     )
     cut = None
-    for x in _stations(SEAT_PITCH):
+    for x in _stations(FLOOR_PITCH):
         for y in (0.0, FLOOR_WIDTH):
             hole = _hole(x, y, E39_BOLT_D, -1.0, THICKNESS + 1.0)
             cut = hole if cut is None else cut.union(hole)
@@ -238,7 +237,7 @@ def _audit_plate(shape: cq.Shape) -> None:
         raise RuntimeError("tie plate is not a valid solid")
     if len(shape.Solids()) != 1:
         raise RuntimeError("tie plate must be one solid")
-    for x in _stations(SEAT_PITCH):
+    for x in _stations(FLOOR_PITCH):
         for y in (0.0, FLOOR_WIDTH):
             if _inside(shape, x, y, THICKNESS / 2.0):
                 raise RuntimeError("tie-plate hole is filled")
@@ -335,7 +334,7 @@ def build_seat() -> cq.Workplane:
     for y in (0.0, FLOOR_WIDTH):
         rails.append(
             cq.Workplane("XY")
-            .box(SEAT_PITCH + 40.0, 34, rail_h)
+            .box(FLOOR_PITCH + 40.0, 34, rail_h)
             .translate((0, y, z_top + THICKNESS + rail_h / 2.0))
             .val()
         )
@@ -360,7 +359,7 @@ def build_flat(web: float) -> cq.Workplane:
     cuts = []
     for x in _stations(FLOOR_PITCH):
         cuts.append(_hole(x, foot_y, FLOOR_BOLT_D, -THICKNESS, THICKNESS * 2))
-    for x in _stations(SEAT_PITCH):
+    for x in _stations(FLOOR_PITCH):
         cuts.append(_hole(x, top_y, E39_BOLT_D, -THICKNESS, THICKNESS * 2))
     cut = cuts[0]
     for extra in cuts[1:]:
@@ -415,7 +414,7 @@ def post_dxf_plate(path: Path) -> None:
     msp.add_text(
         "TIE PLATE  4 mm  no bend  4 holes",
         dxfattribs={"layer": "CUT", "height": 4},
-    ).set_placement((-SEAT_PITCH / 2.0, -PLATE_MARGIN + 6.0))
+    ).set_placement((-FLOOR_PITCH / 2.0, -PLATE_MARGIN + 6.0))
     doc.saveas(str(path))
 
 
