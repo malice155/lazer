@@ -10,7 +10,8 @@ twist and slide, so this seat sits on a frame:
 
 Four holes, not slots. Floor holes and seat holes share the same X when
 FLOOR_PITCH equals SEAT_PITCH, so the load goes straight through the web.
-Both pitches, the step, and the width are MEASURE.
+FLOOR_WIDTH is the measured center distance between the two rails.
+Both pitches and the floor step are still MEASURE.
 
 Brake: 4 mm steel, two bends 90°, inside radius 4 mm, die V32.
 Promecam tang 13 mm. The R47 punch in dxf/ is a different tool.
@@ -63,8 +64,9 @@ FLOOR_BOLT_D = 10.5
 # E39 rail screw on the RealOEM rail diagram is M10 (52108162348).
 E39_BOLT_D = 10.5
 
-# MEASURE. Distance between the two Prado bolt lines.
-FLOOR_WIDTH = 450.0
+# Center distance between the hole of one rail and the hole of the other.
+# Measured on the TLC 120 BMW-seat rails.
+FLOOR_WIDTH = 420.0
 
 SHOW_BRACKET = {"roll": 0.0, "elevation": -18.0, "azimuth": 70.0, "zoom": 1.15}
 SHOW_PLATE = {"roll": 0.0, "elevation": -55.0, "azimuth": 25.0, "zoom": 1.05}
